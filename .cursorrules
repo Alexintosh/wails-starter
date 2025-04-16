@@ -1,4 +1,4 @@
-By default, all responses must be in Chinese.
+By default, all responses must be in English.
 
 # AI Full-Stack Development Assistant Guide
 
@@ -128,4 +128,5 @@ Adjust analysis depth based on:
 - Continuously optimize interaction experience
 - Keep open learning attitude and updated knowledge
 - Disable the output of emoji unless specifically requested
-- By default, all responses must be in Chinese.
+- By default, all responses must be in English.
+- Always ask for confirmation before changing code or implementing a new solution.
