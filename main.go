@@ -68,7 +68,9 @@ func main() {
 	})
 
 	go func() {
-		mainthread.Init(registerHotkey)
+		mainthread.Init(func() {
+			registerHotkey(mainWindow)
+		})
 	}()
 
 	setupSystemTray(app, mainWindow)
@@ -102,6 +104,7 @@ func setupSystemTray(app *application.App, mainWindow *application.WebviewWindow
 	menu := app.NewMenu()
 
 	menu.Add("Show Window").OnClick(func(ctx *application.Context) {
+		//mainWindow.Center()
 		mainWindow.Show()
 		mainWindow.Focus()
 	})
@@ -123,7 +126,7 @@ func setupSystemTray(app *application.App, mainWindow *application.WebviewWindow
 
 }
 
-func registerHotkey() {
+func registerHotkey(mainWindow *application.WebviewWindow) {
 	// the actual shortcut keybind - Ctrl + Shift + S
 	// for more info - refer to the golang.design/x/hotkey documentation
 	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyS)
@@ -137,6 +140,13 @@ func registerHotkey() {
 	// you can either or neither, or both
 	fmt.Printf("hotkey: %v is registered\n", hk)
 	<-hk.Keydown()
+	if mainWindow.IsVisible() {
+		mainWindow.Hide()
+	} else {
+		mainWindow.Center()
+		mainWindow.Show()
+		mainWindow.Focus()
+	}
 	// do anything you want on Key down event
 	fmt.Printf("hotkey: %v is down\n", hk)
 
@@ -150,5 +160,5 @@ func registerHotkey() {
 	fmt.Printf("hotkey: %v is unregistered\n", hk)
 
 	// // reattach listener
-	registerHotkey()
+	registerHotkey(mainWindow)
 }
