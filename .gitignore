@@ -3,6 +3,7 @@
 .vs/
 .task/
 bindings/
+.DS_Store
 
 bin
 frontend/dist

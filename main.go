@@ -3,10 +3,13 @@ package main
 import (
 	"embed"
 	_ "embed"
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
+	"golang.design/x/hotkey"
+	"golang.design/x/mainthread"
 )
 
 // Wails uses Go's `embed` package to embed the frontend files into the binary.
@@ -64,14 +67,8 @@ func main() {
 		URL: "/",
 	})
 
-	// Create a goroutine that emits an event containing the current time every second.
-	// The frontend can listen to this event and update the UI accordingly.
 	go func() {
-		for {
-			now := time.Now().Format(time.RFC1123)
-			app.EmitEvent("time", now)
-			time.Sleep(time.Second)
-		}
+		mainthread.Init(registerHotkey)
 	}()
 
 	setupSystemTray(app, mainWindow)
@@ -124,4 +121,34 @@ func setupSystemTray(app *application.App, mainWindow *application.WebviewWindow
 	systray.WindowOffset(10)
 	systray.WindowDebounce(200 * time.Millisecond)
 
+}
+
+func registerHotkey() {
+	// the actual shortcut keybind - Ctrl + Shift + S
+	// for more info - refer to the golang.design/x/hotkey documentation
+	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyS)
+	err := hk.Register()
+	if err != nil {
+		fmt.Printf("Failed to register hotkey: %v", err)
+		return
+	}
+
+	// you have 2 events available - Keyup and Keydown
+	// you can either or neither, or both
+	fmt.Printf("hotkey: %v is registered\n", hk)
+	<-hk.Keydown()
+	// do anything you want on Key down event
+	fmt.Printf("hotkey: %v is down\n", hk)
+
+	// <-hk.Keyup()
+	// // do anything you want on Key up event
+	// fmt.Printf("hotkey: %v is up\n", hk)
+
+	//runtime.EventsEmit(a.ctx, "Backend:GlobalHotkeyEvent", time.Now().String())
+
+	hk.Unregister()
+	fmt.Printf("hotkey: %v is unregistered\n", hk)
+
+	// // reattach listener
+	registerHotkey()
 }
