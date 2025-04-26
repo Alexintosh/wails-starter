@@ -67,6 +67,7 @@ func main() {
 		URL: "/",
 	})
 
+	// we need the routine because it's a blocking operation
 	go func() {
 		mainthread.Init(func() {
 			registerHotkey(mainWindow)

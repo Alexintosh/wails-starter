@@ -1,6 +1,6 @@
 # wails-react-ts-template
 
-[中文](https://github.com/Cassianvale/wails-react-ts-template/blob/main/README.md) / English
+React ts template for wails3 that demostrated tray icon and hotkey summoning.
 
 ## Features
 
@@ -48,3 +48,5 @@
 
 ## Wails3 Docs
 https://v3alpha.wails.io/
+
+[Originally forked form](https://github.com/Cassianvale/wails-react-ts-template/blob/main/README.md)
